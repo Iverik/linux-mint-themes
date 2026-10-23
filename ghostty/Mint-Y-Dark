@@ -1,0 +1,58 @@
+# Mint-Y-Dark - a Ghostty theme built from Linux Mint's own Mint-Y-Dark
+# GTK/Cinnamon theme, so the terminal reads as part of the desktop.
+#
+# Where the colours come from (all from /usr/share/themes/Mint-Y-Dark*):
+#   - background is the window title bar / menu grey (wm_bg), so the
+#     terminal fuses with its own title bar
+#   - foreground, black and white slots are the Cinnamon panel/menu greys
+#   - green is the Mint-Y accent family: accent, hover, pale mint
+#   - every other hue is one of Mint-Y's official accent colours
+#     (Red, Sand, Blue, Purple, Teal), lifted in OKLCH lightness with the
+#     hue held until it clears ~6:1 on the background
+#
+# Design rules (checked by scripts/check_contrast.py):
+#   - every regular colour (1-6) clears WCAG 6:1 contrast on the background
+#   - bright colours (9-14) sit above their regular twins in lightness
+#     (highlights via lightness, not hue shift)
+#   - character lives in 1-6; black/white (0/7/15) are not relied upon
+
+# -- normal ------------------------------------------------------------------
+# panel grey
+palette = 0=#303036
+# Red accent #e82127, lifted
+palette = 1=#ff7469
+# accent hover green
+palette = 2=#5acb78
+# Sand accent
+palette = 3=#c5a07c
+# Blue accent #0c75de, lifted
+palette = 4=#48a3ff
+# Purple accent #8c5dd9, lifted
+palette = 5=#b689ff
+# Teal accent #199ca8, lifted
+palette = 6=#37afbb
+# panel secondary text
+palette = 7=#c3c3c3
+
+# -- bright ------------------------------------------------------------------
+# Grey accent - dim text, autosuggestions
+palette = 8=#70737a
+palette = 9=#ffa091
+# pale mint
+palette = 10=#98deab
+palette = 11=#d9b38e
+palette = 12=#66c1ff
+palette = 13=#d3a6ff
+palette = 14=#56c9d5
+palette = 15=#ffffff
+
+# -- ui ----------------------------------------------------------------------
+background = #222226
+foreground = #e1e1e1
+# the Mint-Y accent itself
+cursor-color = #35a854
+cursor-text = #222226
+# accent pressed-state green, so selections read as Mint without the
+# full-strength accent washing out the text
+selection-background = #1d5a2d
+selection-foreground = #ffffff

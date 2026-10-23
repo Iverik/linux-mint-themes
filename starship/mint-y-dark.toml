@@ -1,0 +1,274 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# -----------------------------------------------------------------------
+#  Mint-Y-Dark "Rail" powerline for Starship
+#  A fused bar that steps up through Cinnamon's panel greys, rounded caps
+#  at both outer ends, chevron dividers between segments. Pairs with the
+#  Mint-Y-Dark Ghostty theme in this repo.
+#
+#  Layout:
+#    line 1 (left):   os + user -> directory -> git -> toolchains
+#    line 1 (right):  cmd duration | clock
+#    line 2:          input line
+#
+#  Needs a Nerd Font (the screenshots use JetBrainsMono Nerd Font Mono).
+#  Every colour comes from [palettes.mint_y_dark] at the bottom, so you
+#  can lift that block into your own config instead.
+# -----------------------------------------------------------------------
+
+palette = 'mint_y_dark'
+add_newline = true
+
+format = """
+[](rail0)\
+$os\
+$username\
+$hostname\
+[](fg:rail0 bg:rail1)\
+$directory\
+[](fg:rail1 bg:rail2)\
+$git_branch\
+$git_status\
+[](fg:rail2 bg:rail3)\
+$c\
+$cpp\
+$rust\
+$golang\
+$zig\
+$nodejs\
+$bun\
+$deno\
+$python\
+$lua\
+$java\
+$kotlin\
+$swift\
+$dotnet\
+$php\
+$ruby\
+$dart\
+$elixir\
+$haskell\
+$scala\
+$gleam\
+[](fg:rail3)\
+$fill\
+$cmd_duration\
+$time\
+$line_break\
+$character"""
+
+# -- Rail step 0: OS badge + username ------------------------------------
+
+[os]
+disabled = false
+format = '[ $symbol]($style)'
+style = 'bold fg:os_fg bg:rail0'
+
+[username]
+show_always = true
+format = '[$user ]($style)'
+style_user = 'bold fg:os_fg bg:rail0'
+style_root = 'bold fg:alert bg:rail0'
+
+[hostname]
+ssh_only = true
+ssh_symbol = ' '
+format = '[$ssh_symbol$hostname ]($style)'
+style = 'fg:alert bg:rail0'
+
+# -- Rail step 1: directory -----------------------------------------------
+
+[directory]
+format = '[ $path$read_only ]($style)'
+style = 'bold fg:dir_fg bg:rail1'
+truncation_length = 3
+truncation_symbol = '…/'
+read_only = ' 󰌾'
+
+[directory.substitutions]
+'Documents' = ' '
+'Downloads' = ' '
+'Music' = ' '
+'Pictures' = ' '
+'projects' = ' '
+
+# -- Rail step 2: git ------------------------------------------------------
+
+[git_branch]
+symbol = ' '
+format = '[ $symbol$branch ]($style)'
+style = 'bold fg:git_fg bg:rail2'
+
+[git_status]
+format = '([$all_status$ahead_behind ]($style))'
+style = 'fg:git_fg bg:rail2'
+
+[git_commit]
+tag_symbol = '  '
+
+# -- Rail step 3: toolchains (cyan text) -----------------------------------
+
+[c]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[cpp]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[rust]
+symbol = '󱘗 '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[golang]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[zig]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[nodejs]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[bun]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[deno]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[python]
+symbol = ' '
+format = '[ $symbol($version)( \($virtualenv\)) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[lua]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[java]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[kotlin]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[swift]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[dotnet]
+symbol = ' '
+format = '[ $symbol($tfm) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[php]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[ruby]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[dart]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[elixir]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[haskell]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[scala]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+[gleam]
+symbol = ' '
+format = '[ $symbol($version) ]($style)'
+style = 'fg:lang_fg bg:rail3'
+
+# -- Right side: duration + clock ------------------------------------------
+# $fill in `format` pushes these to the right end of line 1; right_format
+# would put them on the input line instead.
+
+[fill]
+symbol = ' '
+
+[cmd_duration]
+min_time = 2000
+format = '[](fg:rail2)[  $duration ]($style)[](fg:rail2) '
+style = 'fg:dur_fg bg:rail2'
+
+[time]
+disabled = false
+time_format = '%H:%M'
+format = '[](fg:rail3)[  $time ]($style)[](fg:rail3)'
+style = 'bold fg:clock_fg bg:rail3'
+
+# -- Input line --------------------------------------------------------------
+
+[character]
+success_symbol = '[❯](bold fg:ok)'
+error_symbol = '[❯](bold fg:alert)'
+vimcmd_symbol = '[❮](bold fg:vim)'
+vimcmd_replace_one_symbol = '[❮](bold fg:alert)'
+vimcmd_replace_symbol = '[❮](bold fg:alert)'
+vimcmd_visual_symbol = '[❮](bold fg:dir_fg)'
+
+# -- Palette -----------------------------------------------------------------
+
+# Mint-Y-Dark palette, matching the Mint-Y-Dark Ghostty theme.
+# Uses the same keys as a "rail" powerline prompt: rail0-3 are segment
+# backgrounds that step up through Cinnamon's panel greys, and the *_fg
+# keys are the text drawn on them. To use it with your own prompt, copy
+# this block and set `palette = 'mint_y_dark'`.
+[palettes.mint_y_dark]
+# Cinnamon panel/menu greys, darkest first
+rail0 = '#29292e'
+rail1 = '#303036'
+rail2 = '#38383e'
+rail3 = '#44444c'
+base = '#222226'
+mantle = '#1d1d21'
+surface = '#303036'
+gray = '#70737a'
+dimmed = '#a8a8a8'
+text = '#e1e1e1'
+# the Mint-Y accent for the leading badge, pale mint for the path, then
+# the lifted Teal/Aqua/Sand accents for the deeper segments
+os_fg = '#35a854'
+dir_fg = '#98deab'
+git_fg = '#56c9d5'
+lang_fg = '#51c3ff'
+dur_fg = '#d9b38e'
+clock_fg = '#c3c3c3'
+ok = '#35a854'
+alert = '#ff7469'
+vim = '#51c3ff'
