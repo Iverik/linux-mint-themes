@@ -1,2 +1,8 @@
 __pycache__/
 .ruff_cache/
+
+# Claude Code: local agent files never belong in the repo
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+.mcp.json

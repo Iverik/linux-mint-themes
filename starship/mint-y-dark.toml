@@ -1,10 +1,11 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 # -----------------------------------------------------------------------
-#  Mint-Y-Dark "Rail" powerline for Starship
+#  Mint-Y "Rail" powerline for Starship
 #  A fused bar that steps up through Cinnamon's panel greys, rounded caps
-#  at both outer ends, chevron dividers between segments. Pairs with the
-#  Mint-Y-Dark Ghostty theme in this repo.
+#  at both outer ends, chevron dividers between segments. Ships two
+#  palettes matching this repo's Ghostty themes: mint_y_dark and
+#  mint_y_vivid (set `palette` below to switch).
 #
 #  Layout:
 #    line 1 (left):   os + user -> directory -> git -> toolchains
@@ -12,11 +13,11 @@
 #    line 2:          input line
 #
 #  Needs a Nerd Font (the screenshots use JetBrainsMono Nerd Font Mono).
-#  Every colour comes from [palettes.mint_y_dark] at the bottom, so you
-#  can lift that block into your own config instead.
+#  Every colour comes from the [palettes.*] blocks at the bottom, so you
+#  can lift one into your own config instead.
 # -----------------------------------------------------------------------
 
-palette = 'mint_y_dark'
+palette = 'mint_y_vivid'
 add_newline = true
 
 format = """
@@ -272,3 +273,28 @@ clock_fg = '#c3c3c3'
 ok = '#35a854'
 alert = '#ff7469'
 vim = '#51c3ff'
+
+# Mint-Y-Vivid palette, matching the Mint-Y-Vivid Ghostty theme: the same
+# rails, with the rich accents from ghostty/Mint-Y-Vivid. This is the
+# default; set `palette = 'mint_y_dark'` at the top for the muted one.
+[palettes.mint_y_vivid]
+rail0 = '#29292e'
+rail1 = '#303036'
+rail2 = '#38383e'
+rail3 = '#44444c'
+base = '#222226'
+mantle = '#1d1d21'
+surface = '#303036'
+gray = '#70737a'
+dimmed = '#a8a8a8'
+text = '#f0f0f0'
+# green badge, gold path, Purple git, Aqua toolchains, Orange duration
+os_fg = '#58e57b'
+dir_fg = '#ffc84e'
+git_fg = '#b58fff'
+lang_fg = '#48bdff'
+dur_fg = '#ff8254'
+clock_fg = '#c3c3c3'
+ok = '#58e57b'
+alert = '#ff749f'
+vim = '#00d6e7'

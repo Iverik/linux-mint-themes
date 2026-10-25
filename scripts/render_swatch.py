@@ -2,8 +2,8 @@
 # requires-python = ">=3.13"
 # dependencies = []
 # ///
-"""Render assets/palette.svg from the Ghostty theme, so the README swatch
-can't drift from the real colours.
+"""Render assets/<theme>/palette.svg from each Ghostty theme, so the README
+swatches can't drift from the real colours.
 
 Run with `uv run scripts/render_swatch.py`.
 """
@@ -11,9 +11,6 @@ Run with `uv run scripts/render_swatch.py`.
 from pathlib import Path
 
 from check_contrast import ROOT, luminance, parse_ghostty
-
-THEME = ROOT / "ghostty" / "Mint-Y-Dark"
-OUT = ROOT / "assets" / "palette.svg"
 
 NAMES = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
 CHIP, GAP, PAD = 96, 10, 28
@@ -36,8 +33,8 @@ def chip(x: int, y: int, colour: str, label: str, h: int = CHIP) -> str:
     )
 
 
-def main() -> None:
-    t = parse_ghostty(THEME)
+def render(theme: Path) -> Path:
+    t = parse_ghostty(theme)
     step = CHIP + GAP
     width = PAD * 2 + step * 8 - GAP
     rows = []
@@ -74,14 +71,20 @@ def main() -> None:
         f'height="{height}" viewBox="0 0 {width} {height}" font-family="{FONT}">'
         f'<rect width="{width}" height="{height}" rx="16" fill="{t["background"]}"/>'
         f'<text x="{PAD}" y="{PAD + 12}" fill="{t["foreground"]}" font-size="15" '
-        f'font-weight="700">Mint-Y-Dark</text>'
+        f'font-weight="700">{theme.name}</text>'
         f'<text x="{width - PAD}" y="{PAD + 12}" fill="{t["palette8"]}" '
         f'font-size="12" text-anchor="end">ghostty · starship</text>'
         + "".join(rows)
         + "</svg>\n"
     )
-    Path(OUT).write_text(svg)
-    print(OUT.relative_to(ROOT))
+    out = ROOT / "assets" / theme.name.lower() / "palette.svg"
+    out.write_text(svg)
+    return out
+
+
+def main() -> None:
+    for theme in sorted((ROOT / "ghostty").iterdir()):
+        print(render(theme).relative_to(ROOT))
 
 
 if __name__ == "__main__":

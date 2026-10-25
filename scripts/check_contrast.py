@@ -7,12 +7,14 @@
 Ghostty: regular colours 1-6 clear 6:1 on the background, each bright twin
 (9-14) is lighter than its regular colour, and the foreground, cursor and
 selection pairs stay readable. Starship: each *_fg key clears 4.5:1 on the
-rail it is drawn on.
+rail it is drawn on. Claude Code: text stays readable on every tinted
+surface, and accents and hints stay readable on the terminal background.
 
 Run with `uv run scripts/check_contrast.py`; exits non-zero on any failure.
 Output is coloured on a terminal; NO_COLOR turns that off, FORCE_COLOR on.
 """
 
+import json
 import math
 import os
 import sys
@@ -34,6 +36,51 @@ STARSHIP_PAIRS = {
     "ok": "base",
     "vim": "base",
 }
+
+# Claude Code: (foreground token, surface token or None for the terminal
+# background, minimum ratio, minimum for the 256-colour ANSI variants)
+CLAUDE_PAIRS = [
+    ("text", "userMessageBackground", 7),
+    ("text", "bashMessageBackgroundColor", 7),
+    ("text", "memoryBackgroundColor", 7),
+    ("text", "diffAdded", 6),
+    ("text", "diffRemoved", 6),
+    ("text", "diffAddedDimmed", 7),
+    ("text", "diffRemovedDimmed", 7),
+    # the 256-colour cube has no green between #005f00 (line) and #008700
+    # (word), so ANSI word highlights can only reach about 3.7:1
+    ("text", "diffAddedWord", 4.5, 3.5),
+    ("text", "diffRemovedWord", 4.5, 3.5),
+    ("text", "selectionBg", 4.5),
+    ("inverseText", "claude", 4.5),
+    ("inactive", None, 4.5),
+    ("subtle", None, 3),
+    *(
+        (token, None, 4.5)
+        for token in (
+            "claude",
+            "permission",
+            "suggestion",
+            "success",
+            "error",
+            "warning",
+            "planMode",
+            "autoAccept",
+            "remember",
+        )
+    ),
+]
+ANSI = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"]
+
+
+def xterm256(index: int) -> str:
+    """Default xterm colour for a 256-colour index (16-255)."""
+    if index >= 232:
+        v = 8 + 10 * (index - 232)
+        return f"#{v:02x}{v:02x}{v:02x}"
+    cube = [0, 95, 135, 175, 215, 255]
+    index -= 16
+    return "#" + "".join(f"{cube[(index // d) % 6]:02x}" for d in (36, 6, 1))
 
 
 def channels(hex_colour: str) -> list[float]:
@@ -135,12 +182,45 @@ def check_starship(path: Path, report: Report) -> None:
             report.check(ratio >= 4.5, f"{name}.{fg} on {bg}", f"{ratio:5.2f} >= 4.5")
 
 
+def check_claude(path: Path, report: Report) -> None:
+    """Resolve ANSI slot names through the matching Ghostty theme and
+    xterm-256 indices to their default colours, then check the token pairs
+    Claude Code draws on top of each other."""
+    print(paint(str(path.relative_to(ROOT)), "1;34"))
+    theme = json.loads(path.read_text())
+    ghostty = parse_ghostty(ROOT / "ghostty" / theme["name"].removesuffix(" (ANSI)"))
+
+    def resolve(value: str) -> str:
+        if value.startswith("ansi256("):
+            return xterm256(int(value.removeprefix("ansi256(").rstrip(")")))
+        if not value.startswith("ansi:"):
+            return value
+        name = value.removeprefix("ansi:")
+        slot = ANSI.index(name.removesuffix("Bright")) + 8 * name.endswith("Bright")
+        return ghostty[f"palette{slot}"]
+
+    colours = {token: resolve(v) for token, v in theme["overrides"].items()}
+    ansi = theme["base"].endswith("-ansi")
+    for fg, bg, minimum, *ansi_minimum in CLAUDE_PAIRS:
+        if ansi and ansi_minimum:
+            minimum = ansi_minimum[0]
+        surface = colours[bg] if bg else ghostty["background"]
+        ratio = contrast(colours[fg], surface)
+        report.check(
+            ratio >= minimum,
+            f"{fg} on {bg or 'terminal'}",
+            f"{ratio:5.2f} >= {minimum}",
+        )
+
+
 def main() -> None:
     report = Report()
     for path in sorted((ROOT / "ghostty").iterdir()):
         check_ghostty(path, report)
     for path in sorted((ROOT / "starship").glob("*.toml")):
         check_starship(path, report)
+    for path in sorted((ROOT / "claude-code").glob("*.json")):
+        check_claude(path, report)
     if report.failures:
         print("\n" + paint(f"{report.failures} check(s) failed", "1;31"))
         sys.exit(1)
