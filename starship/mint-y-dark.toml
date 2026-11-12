@@ -288,12 +288,13 @@ surface = '#303036'
 gray = '#70737a'
 dimmed = '#a8a8a8'
 text = '#f0f0f0'
-# green badge, gold path, Purple git, Aqua toolchains, Orange duration
+# minty rail like mint_y_dark: green badge, bright-green path, bright-Teal
+# git, Aqua toolchains, pale-gold duration (the vivid twins of its keys)
 os_fg = '#58e57b'
-dir_fg = '#ffc84e'
-git_fg = '#b58fff'
+dir_fg = '#7ef696'
+git_fg = '#52e9f8'
 lang_fg = '#48bdff'
-dur_fg = '#ff8254'
+dur_fg = '#ffe1a5'
 clock_fg = '#c3c3c3'
 ok = '#58e57b'
 alert = '#ff749f'

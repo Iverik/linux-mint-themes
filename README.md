@@ -72,10 +72,10 @@ palette = 'mint_y_vivid'   # or 'mint_y_dark'
 |---|---|---|---|
 | `rail0`–`rail3` | segment backgrounds, darkest first | `#29292e` `#303036` `#38383e` `#44444c` | same |
 | `os_fg`, `ok` | OS badge, user, success prompt | `#58e57b` | `#35a854` |
-| `dir_fg` | directory | `#ffc84e` | `#98deab` |
-| `git_fg` | branch and status | `#b58fff` | `#56c9d5` |
+| `dir_fg` | directory | `#7ef696` | `#98deab` |
+| `git_fg` | branch and status | `#52e9f8` | `#56c9d5` |
 | `lang_fg` | toolchain versions | `#48bdff` | `#51c3ff` |
-| `dur_fg` | command duration | `#ff8254` | `#d9b38e` |
+| `dur_fg` | command duration | `#ffe1a5` | `#d9b38e` |
 | `clock_fg` | clock | `#c3c3c3` | `#c3c3c3` |
 | `alert` | root user, error prompt | `#ff749f` | `#ff7469` |
 | `vim` | vi-mode prompt | `#00d6e7` | `#51c3ff` |
